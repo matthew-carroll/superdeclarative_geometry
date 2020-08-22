@@ -1,0 +1,18 @@
+# Check out https://docs.codemagic.io/yaml/yaml/ for more information
+
+workflows:
+    dart-package:
+        name: superdeclarative_polar_coords
+        max_build_duration: 15
+#        environment:
+#            flutter: dev
+        triggering:
+            events:
+                - push
+            branch_patterns:
+                - pattern: 'master'
+                  include: true
+                  source: true
+        scripts:
+            - flutter packages pub get
+            - flutter test
