@@ -2,7 +2,7 @@
 
 workflows:
     dart-package:
-        name: superdeclarative_polar_coords
+        name: superdeclarative_geometry
         max_build_duration: 15
 #        environment:
 #            flutter: dev

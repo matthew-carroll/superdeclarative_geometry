@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:superdeclarative_polar_coords/src/common.dart';
+import 'package:superdeclarative_geometry/src/common.dart';
 import 'package:test/test.dart';
 
 Matcher isEquivalentTo(Equivalency other) {

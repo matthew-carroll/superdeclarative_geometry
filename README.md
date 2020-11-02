@@ -2,13 +2,21 @@
 
 First-class support for angles, polar coordinates, and related math.
 
+---
+
+If you get value from this package, please consider supporting SuperDeclarative!
+
+<a href="https://donate.superdeclarative.com" target="_blank" alt="Donate"><img src="https://img.shields.io/badge/Donate-%24%24-green"></a>
+
+---
+
 ## Get Started
 
-[![pub](https://img.shields.io/pub/v/superdeclarative_polar_coords.svg?style=flat)](https://pub.dev/packages/superdeclarative_polar_coords)
+[![pub](https://img.shields.io/pub/v/superdeclarative_geometry.svg?style=flat)](https://pub.dev/packages/superdeclarative_geometry)
 
 ```yaml
 dependencies:
-  superdeclarative_polar_coords: ^[VERSION]
+  superdeclarative_geometry: ^[VERSION]
 ```
 
 ## Quick Reference
@@ -129,7 +137,7 @@ Flutter app screens treat the positive x-axis as a 0° angle, but then treats po
 
 Ship navigation treats the positive y-axis as a 0° angle and then treats positive angles as running clockwise.
 
-Each of these situations apply a different orientation when mapping an angle, or a polar coordinate, to a location in Cartesian space. This concept of orientation is supported by `superdeclarative_polar_coords` by way of `CartesianOrientation`s.
+Each of these situations apply a different orientation when mapping an angle, or a polar coordinate, to a location in Cartesian space. This concept of orientation is supported by `superdeclarative_geometry` by way of `CartesianOrientation`s.
 
 ```dart
 final polarCoord = PolarCoord(100, Angle.fromDegrees(30));

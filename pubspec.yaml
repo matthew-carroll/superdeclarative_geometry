@@ -1,6 +1,6 @@
-name: superdeclarative_polar_coords
+name: superdeclarative_geometry
 version: 0.0.9-dev.1
-description: First-class support for angles, polar coordinates, and related math.
+description: First-class support for angles, polar coordinates, and more.
 homepage: 
 documentation: 
 

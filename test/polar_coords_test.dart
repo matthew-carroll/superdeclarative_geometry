@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:superdeclarative_polar_coords/src/angles.dart';
-import 'package:superdeclarative_polar_coords/src/polar_coords.dart';
+import 'package:superdeclarative_geometry/src/angles.dart';
+import 'package:superdeclarative_geometry/src/polar_coords.dart';
 import 'package:test/test.dart';
 
 import 'common.dart';
