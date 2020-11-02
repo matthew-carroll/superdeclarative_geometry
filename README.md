@@ -1,4 +1,4 @@
-# SuperDeclarative Polar Coords
+# SuperDeclarative Geometry
 
 First-class support for angles, polar coordinates, and related math.
 
