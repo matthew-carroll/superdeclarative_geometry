@@ -11,7 +11,14 @@ import 'common.dart';
 /// adding, subtracting, dividing, multiplying, etc. will be limited to the
 /// the aforementioned range. To represent angles beyond 360°, see `Rotation`.
 class Angle implements Equivalency<Angle>, Approximately<Angle> {
+  // Convenient constant Angles.
   static Angle zero = const Angle.fromDegrees(0);
+  static Angle deg30 = const Angle.fromDegrees(30);
+  static Angle deg45 = const Angle.fromDegrees(45);
+  static Angle deg60 = const Angle.fromDegrees(60);
+  static Angle deg90 = const Angle.fromDegrees(90);
+  static Angle deg180 = const Angle.fromDegrees(180);
+  static Angle deg360 = const Angle.fromDegrees(360);
 
   static const _maxDegrees = 360;
   static const _maxRadians = 2 * pi;
@@ -29,7 +36,10 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
                 ? degrees % _maxDegrees
                 : (degrees % _maxDegrees) - 360) *
             pi /
-            180;
+            180,
+        this.percent = degrees >= 0 || degrees == -360
+            ? (degrees % _maxDegrees) / 360
+            : ((degrees % _maxDegrees) - 360) / 360;
 
   /// Constructs a new `Angle` from the given `radians`.
   ///
@@ -43,13 +53,34 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
                 ? radians % _maxRadians
                 : (radians % _maxRadians) - (2 * pi)) *
             180 /
-            pi;
+            pi,
+        this.percent = radians >= 0 || radians == -2 * pi
+            ? (radians % _maxRadians) / (2 * pi)
+            : ((radians % _maxRadians) - (2 * pi)) / (2 * pi);
+
+  /// Constructs a new `Angle` from the given `percent`.
+  ///
+  /// The resulting `Angle` confines the `percent` to (-1.0, 1.0) by mod'ing
+  /// the incoming value.
+  const Angle.fromPercent(double percent)
+      : this.percent = percent >= 0 || percent == -1.0
+            ? percent % 1.0
+            : (percent % 1.0) - 1.0,
+        this.radians = percent >= 0 || percent == -1.0
+            ? (percent % 1.0) * (2 * pi)
+            : ((percent % 1.0) - 1.0) * (2 * pi),
+        this.degrees = percent >= 0 || percent == -1.0
+            ? (percent % 1.0) * 360
+            : ((percent % 1.0) - 1.0) * 360;
 
   /// Angle expressed as degrees.
   final num degrees;
 
   /// Angle expressed as radians.
   final num radians;
+
+  /// Angle expressed as a percentage.
+  final num percent;
 
   /// True if this `Angle` represents a clockwise arc, or zero.
   bool get isClockwise => degrees >= 0;

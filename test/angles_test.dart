@@ -1,11 +1,45 @@
 import 'dart:math';
 
+import 'package:dart_test_matchers/matchers.dart';
 import 'package:superdeclarative_geometry/src/angles.dart';
 import 'package:superdeclarative_geometry/src/common.dart';
 import 'package:test/test.dart';
 
 void main() {
   group('Angle', () {
+    group('Useful Angle Constants', () {
+      test('lockdown Angle constants', () {
+        expect(
+          Angle.zero,
+          Angle.fromDegrees(0),
+        );
+        expect(
+          Angle.deg30,
+          Angle.fromDegrees(30),
+        );
+        expect(
+          Angle.deg45,
+          Angle.fromDegrees(45),
+        );
+        expect(
+          Angle.deg60,
+          Angle.fromDegrees(60),
+        );
+        expect(
+          Angle.deg90,
+          Angle.fromDegrees(90),
+        );
+        expect(
+          Angle.deg180,
+          Angle.fromDegrees(180),
+        );
+        expect(
+          Angle.deg360,
+          Angle.fromDegrees(360),
+        );
+      });
+    });
+
     group('Value Ranges', () {
       test('limits degree values to (-360°, 360°)', () {
         expect(Angle.fromDegrees(360).degrees, 0);
@@ -24,6 +58,17 @@ void main() {
         expect(Angle.fromRadians(-2.1 * pi).radians, -0.1 * pi);
         expect(Angle.fromRadians(-3 * pi).radians, -pi);
       });
+
+      test('limits percent values to [-1.0, 1.0]', () {
+        expect(Angle.fromPercent(1.0).percent, 0.0);
+        expect(Angle.fromPercent(1.1).percent,
+            moreOrLessEquals(0.1, epsilon: 1e-16));
+        expect(Angle.fromPercent(1.5).percent, 0.5);
+        expect(Angle.fromPercent(-1.0).percent, 0.0);
+        expect(Angle.fromPercent(-1.1).percent,
+            moreOrLessEquals(-0.1, epsilon: 1e-16));
+        expect(Angle.fromPercent(-1.5).percent, -0.5);
+      });
     });
 
     group('Conversions', () {
@@ -35,12 +80,44 @@ void main() {
         expect(Angle.fromDegrees(-90).radians, -pi / 2);
       });
 
+      test('converts degrees to percent', () {
+        expect(Angle.fromDegrees(0).percent, 0);
+        expect(Angle.fromDegrees(90).percent, 0.25);
+        expect(Angle.fromDegrees(180).percent, 0.5);
+        expect(Angle.fromDegrees(270).percent, 0.75);
+        expect(Angle.fromDegrees(-90).percent, -0.25);
+      });
+
       test('converts radians to degrees', () {
         expect(Angle.fromRadians(0).degrees, 0);
         expect(Angle.fromRadians(pi / 2).degrees, 90);
         expect(Angle.fromRadians(pi).degrees, 180);
         expect(Angle.fromRadians(3 * pi / 2).degrees, 270);
         expect(Angle.fromRadians(-pi / 2).degrees, -90);
+      });
+
+      test('converts radians to percent', () {
+        expect(Angle.fromRadians(0).percent, 0);
+        expect(Angle.fromRadians(pi / 2).percent, 0.25);
+        expect(Angle.fromRadians(pi).percent, 0.5);
+        expect(Angle.fromRadians(3 * pi / 2).percent, 0.75);
+        expect(Angle.fromRadians(-pi / 2).percent, -0.25);
+      });
+
+      test('converts percent to degrees', () {
+        expect(Angle.fromPercent(0).degrees, 0);
+        expect(Angle.fromPercent(0.25).degrees, 90);
+        expect(Angle.fromPercent(0.5).degrees, 180);
+        expect(Angle.fromPercent(0.75).degrees, 270);
+        expect(Angle.fromPercent(-0.25).degrees, -90);
+      });
+
+      test('converts percent to radians', () {
+        expect(Angle.fromPercent(0).radians, 0);
+        expect(Angle.fromPercent(0.25).radians, pi / 2);
+        expect(Angle.fromPercent(0.5).radians, pi);
+        expect(Angle.fromPercent(0.75).radians, 3 * pi / 2);
+        expect(Angle.fromPercent(-0.25).radians, -(pi / 2));
       });
     });
 

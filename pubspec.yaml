@@ -1,5 +1,5 @@
 name: superdeclarative_geometry
-version: 0.0.9-dev.1
+version: 0.0.1-dev.1
 description: First-class support for angles, polar coordinates, and more.
 homepage: 
 documentation: 
@@ -11,6 +11,9 @@ dependencies:
 
 dev_dependencies:
   test: any
+
+  dart_test_matchers:
+    git: git@github.com:matthew-carroll/dart_test_matchers.git
 
   # flutter_test is here for CI, otherwise would not be necessary.
   flutter_test:
