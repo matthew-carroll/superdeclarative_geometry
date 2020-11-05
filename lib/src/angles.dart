@@ -1,6 +1,7 @@
 // Idea: Angle for opening between 2 rays. Rotation for angles of arbitrary size.
 
 import 'dart:math';
+import 'dart:ui';
 
 import 'common.dart';
 
@@ -11,6 +12,11 @@ import 'common.dart';
 /// adding, subtracting, dividing, multiplying, etc. will be limited to the
 /// the aforementioned range. To represent angles beyond 360°, see `Rotation`.
 class Angle implements Equivalency<Angle>, Approximately<Angle> {
+  /// Linearly interpolates between `a1` and `a2` at time/percent `t`.
+  static Angle lerp(Angle a1, Angle a2, double t) {
+    return Angle.fromRadians(lerpDouble(a1.radians, a2.radians, t));
+  }
+
   // Convenient constant Angles.
   static Angle zero = const Angle.fromDegrees(0);
   static Angle deg30 = const Angle.fromDegrees(30);
@@ -18,7 +24,6 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
   static Angle deg60 = const Angle.fromDegrees(60);
   static Angle deg90 = const Angle.fromDegrees(90);
   static Angle deg180 = const Angle.fromDegrees(180);
-  static Angle deg360 = const Angle.fromDegrees(360);
 
   static const _maxDegrees = 360;
   static const _maxRadians = 2 * pi;
@@ -81,26 +86,6 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
 
   /// Angle expressed as a percentage.
   final num percent;
-
-  /// True if this `Angle` represents a clockwise arc, or zero.
-  bool get isClockwise => degrees >= 0;
-
-  /// True if this `Angle` represents a counter-clockwise arc, or zero.
-  bool get isCounterClockwise => degrees <= 0;
-
-  /// Clockwise for positive angles, counter-clockwise for negative angles.
-  AngleDirection get direction =>
-      isClockwise ? AngleDirection.clockwise : AngleDirection.counterclockwise;
-
-  /// Returns a clockwise version of this `Angle`.
-  Angle makeClockwise() {
-    return isClockwise ? this : -this;
-  }
-
-  /// Returns a counter-clockwise version of this `Angle`.
-  Angle makeCounterClockwise() {
-    return isCounterClockwise ? this : -this;
-  }
 
   /// True if this `Angle` is acute, i.e., in [0°, 90°).
   bool get isAcute => degrees.abs() < 90;
@@ -185,7 +170,7 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
 
   @override
   String toString() {
-    return '${degrees}°';
+    return '$degrees°';
   }
 }
 
@@ -229,9 +214,11 @@ class Rotation {
   final num radians;
 
   /// True if this `Angle` represents a clockwise arc, or zero.
+  // TODO: I think this needs a CartesianOrientation to determine CW
   bool get isClockwise => degrees >= 0;
 
   /// True if this `Angle` represents a counter-clockwise arc, or zero.
+  // TODO: I think this needs a CartesianOrientation to determine CW
   bool get isCounterClockwise => degrees <= 0;
 
   /// Returns an inverted version of this `Rotation`, i.e., clockwise to

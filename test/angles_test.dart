@@ -33,9 +33,36 @@ void main() {
           Angle.deg180,
           Angle.fromDegrees(180),
         );
+      });
+    });
+
+    group('Linear Interpolation', () {
+      test('lerp spot checks', () {
         expect(
-          Angle.deg360,
-          Angle.fromDegrees(360),
+          Angle.lerp(Angle.fromDegrees(0), Angle.fromDegrees(180), 0.5),
+          Angle.fromDegrees(90),
+        );
+        expect(
+          Angle.lerp(Angle.fromDegrees(45), Angle.fromDegrees(135), 0.5),
+          Angle.fromDegrees(90),
+        );
+        expect(
+          Angle.lerp(Angle.fromDegrees(0), Angle.fromDegrees(360), 0.5),
+          Angle
+              .zero, // This is because 360 degrees cannot be represented by an Angle.
+        );
+        expect(
+          Angle.lerp(Angle.fromDegrees(0), Angle.fromDegrees(-180), 0.5),
+          Angle.fromDegrees(-90),
+        );
+        expect(
+          Angle.lerp(Angle.fromDegrees(-45), Angle.fromDegrees(-135), 0.5),
+          Angle.fromDegrees(-90),
+        );
+        expect(
+          Angle.lerp(Angle.fromDegrees(0), Angle.fromDegrees(-360), 0.5),
+          Angle
+              .zero, // This is because 360 degrees cannot be represented by an Angle.
         );
       });
     });
@@ -122,17 +149,6 @@ void main() {
     });
 
     group('Inspection', () {
-      test('reports clockwise and counter-clockwise', () {
-        expect(Angle.fromDegrees(45).isClockwise, true);
-        expect(Angle.fromDegrees(45).isCounterClockwise, false);
-
-        expect(Angle.fromDegrees(-45).isClockwise, false);
-        expect(Angle.fromDegrees(-45).isCounterClockwise, true);
-
-        expect(Angle.fromDegrees(0).isClockwise, true);
-        expect(Angle.fromDegrees(0).isClockwise, true);
-      });
-
       test('reports acute', () {
         expect(Angle.fromDegrees(0).isAcute, true);
         expect(Angle.fromDegrees(0).category, AngleCategory.acute);
@@ -228,15 +244,6 @@ void main() {
         expect(Angle.fromDegrees(-45).invert(), Angle.fromDegrees(-315));
         expect(Angle.fromDegrees(-315).invert(), Angle.fromDegrees(-45));
         expect(Angle.fromDegrees(45).invert().invert(), Angle.fromDegrees(45));
-      });
-
-      test('make clockwise and counterclockwise', () {
-        expect(Angle.fromDegrees(45).makeClockwise(), Angle.fromDegrees(45));
-        expect(Angle.fromDegrees(45).makeCounterClockwise(),
-            Angle.fromDegrees(-45));
-        expect(Angle.fromDegrees(-45).makeClockwise(), Angle.fromDegrees(45));
-        expect(Angle.fromDegrees(-45).makeCounterClockwise(),
-            Angle.fromDegrees(-45));
       });
 
       test('rotates an angle', () {

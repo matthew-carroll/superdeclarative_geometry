@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'angles.dart';
+//import 'cartesian.dart';
 import 'common.dart';
 
 /// Canonical mathematical concept of a "polar coordinate".
@@ -17,10 +18,6 @@ import 'common.dart';
 /// multiplied and divided by scalars, and rotated by an angle. It is also
 /// possible to calculate the angle between polar coordinates.
 class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
-  PolarCoord.fromCartesian(Point point)
-      : this.radius = point.magnitude,
-        this.angle = Angle.fromRadians(atan2(point.y, point.x));
-
   const PolarCoord(
     this.radius,
     this.angle,
@@ -90,13 +87,9 @@ class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
   /// To force a reflexive or non-reflexive version of the return `Angle`, pass
   /// `true` or `false` to `chooseReflexAngle` for reflexive or non-reflexive,
   /// respectively.
-  ///
-  /// To force a clockwise or counter-clockwise direction for the return `Angle`,
-  /// pass the desired `AngleDirection` in `desiredDirection`.
   Angle angleBetween(
     PolarCoord other, {
     bool chooseReflexAngle,
-    AngleDirection desiredDirection,
   }) {
     Angle angleBetween = angle - other.angle;
 
@@ -109,29 +102,7 @@ class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
       }
     }
 
-    // Ensure the Angle is CW or CCW based on preference.
-    if (desiredDirection != null) {
-      switch (desiredDirection) {
-        case AngleDirection.clockwise:
-          angleBetween = angleBetween.makeClockwise();
-          break;
-        case AngleDirection.counterclockwise:
-          angleBetween = angleBetween.makeCounterClockwise();
-          break;
-      }
-    }
-
     return angleBetween;
-  }
-
-  /// Maps this `PolarCoord` to a Cartesian `Point` by way of the provided
-  /// `orientation`.
-  ///
-  /// By default a `ScreenOrientation` is used, which treats an angle of 0°
-  /// as pointing to the right, and positive rotations as clockwise.
-  Point toCartesian(
-      {CartesianOrientation orientation = CartesianOrientation.screen}) {
-    return orientation.polarToCartesian(this);
   }
 
   @override
@@ -158,57 +129,4 @@ class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
 
   @override
   String toString() => '($radius, ${angle.degrees}°)';
-}
-
-/// Maps a `PolarCoord` to a Cartesian `Point` based on a given
-/// orientation, e.g., the direction of the 0° axis and whether the
-/// positive rotation direction is clockwise or counter-clockwise.
-abstract class CartesianOrientation {
-  static const CartesianOrientation screen = ScreenOrientation();
-  static const CartesianOrientation math = MathOrientation();
-  static const CartesianOrientation navigation = NavigationOrientation();
-
-  Point polarToCartesian(PolarCoord polarCoord);
-}
-
-/// Orientation with a reference direction pointing to the right, with a
-/// clockwise rotation.
-class ScreenOrientation implements CartesianOrientation {
-  const ScreenOrientation();
-
-  @override
-  Point<num> polarToCartesian(PolarCoord polarCoord) {
-    return Point(
-      polarCoord.radius * cos(polarCoord.angle.radians),
-      polarCoord.radius * sin(polarCoord.angle.radians),
-    );
-  }
-}
-
-/// Orientation with a reference direction pointing to the right, with a
-/// counter-clockwise rotation.
-class MathOrientation implements CartesianOrientation {
-  const MathOrientation();
-
-  @override
-  Point<num> polarToCartesian(PolarCoord polarCoord) {
-    return Point(
-      polarCoord.radius * cos(polarCoord.angle.radians),
-      polarCoord.radius * -sin(polarCoord.angle.radians),
-    );
-  }
-}
-
-/// Orientation with a reference direction pointing up from the origin, with
-/// a clockwise rotation.
-class NavigationOrientation implements CartesianOrientation {
-  const NavigationOrientation();
-
-  @override
-  Point<num> polarToCartesian(PolarCoord polarCoord) {
-    return Point(
-      polarCoord.radius * sin(polarCoord.angle.radians),
-      polarCoord.radius * cos(polarCoord.angle.radians),
-    );
-  }
 }
