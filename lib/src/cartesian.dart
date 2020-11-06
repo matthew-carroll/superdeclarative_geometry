@@ -16,6 +16,12 @@ abstract class CartesianOrientation {
 
   bool isCounterClockwise(Angle angle);
 
+  Angle makeClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]);
+
+  Angle makeCounterClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]);
+
   Point polarToCartesian(PolarCoord polarCoord);
 
   PolarCoord cartesianToPolar(Point cartesianCoord);
@@ -29,6 +35,20 @@ class ScreenOrientation implements CartesianOrientation {
   bool isClockwise(Angle angle) => angle.degrees >= 0;
 
   bool isCounterClockwise(Angle angle) => angle.degrees <= 0;
+
+  Angle makeClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return angle.degrees >= 0.0
+        ? angle
+        : Angle.fromDegrees(360 + angle.degrees);
+  }
+
+  Angle makeCounterClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return angle.degrees <= 0.0
+        ? angle
+        : Angle.fromDegrees(angle.degrees - 360);
+  }
 
   @override
   Point<num> polarToCartesian(PolarCoord polarCoord) {
@@ -54,6 +74,20 @@ class MathOrientation implements CartesianOrientation {
 
   bool isCounterClockwise(Angle angle) => angle.degrees >= 0;
 
+  Angle makeClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return angle.degrees <= 0.0
+        ? angle
+        : Angle.fromDegrees(angle.degrees - 360);
+  }
+
+  Angle makeCounterClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return angle.degrees >= 0.0
+        ? angle
+        : Angle.fromDegrees(360 + angle.degrees);
+  }
+
   @override
   Point<num> polarToCartesian(PolarCoord polarCoord) {
     return Point(
@@ -78,11 +112,25 @@ class NavigationOrientation implements CartesianOrientation {
 
   bool isCounterClockwise(Angle angle) => angle.degrees <= 0;
 
+  Angle makeClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return angle.degrees >= 0.0
+        ? angle
+        : Angle.fromDegrees(360 + angle.degrees);
+  }
+
+  Angle makeCounterClockwise(Angle angle,
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return angle.degrees <= 0.0
+        ? angle
+        : Angle.fromDegrees(angle.degrees - 360);
+  }
+
   @override
   Point<num> polarToCartesian(PolarCoord polarCoord) {
     return Point(
-      polarCoord.radius * sin(polarCoord.angle.radians),
-      polarCoord.radius * cos(polarCoord.angle.radians),
+      polarCoord.radius * cos((polarCoord.angle - Angle.deg90).radians),
+      polarCoord.radius * sin((polarCoord.angle - Angle.deg90).radians),
     );
   }
 
@@ -122,17 +170,13 @@ extension CartesianAngle on Angle {
   /// Returns a clockwise version of this `Angle`.
   Angle makeClockwise(
       [CartesianOrientation orientation = CartesianOrientation.screen]) {
-    return isClockwise(orientation)
-        ? this
-        : Angle.fromDegrees(360 + this.degrees);
+    return orientation.makeClockwise(this);
   }
 
   /// Returns a counter-clockwise version of this `Angle`.
   Angle makeCounterClockwise(
       [CartesianOrientation orientation = CartesianOrientation.screen]) {
-    return isCounterClockwise(orientation)
-        ? this
-        : Angle.fromDegrees(this.degrees - 360);
+    return orientation.makeCounterClockwise(this);
   }
 }
 
