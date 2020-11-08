@@ -19,6 +19,8 @@ dependencies:
   superdeclarative_geometry: ^[VERSION]
 ```
 
+---
+
 ## Quick Reference
 
 ### Angles
@@ -37,15 +39,19 @@ myAngle.degrees;
 myAngle.radians;
 ```
 
-Determine the direction and category of an `Angle`:
+Determine an `Angle`'s direction and force it to be positive or negative:
 
 ```dart
-myAngle.isClockwise;
-myAngle.isCounterClockwise;
-myAngle.direction;
-final clockwiseAngle = myAngle.makeClockwise();
-final counterClockwiseAngle = myAngle.makeCounterClockwise();
+myAngle.isPositive;
+myAngle.isNegative;
 
+myAngle.makePositive(); // Ex: -270° ->  90°
+myAngle.makeNegative(); // Ex:  270° -> -90°
+```
+
+Determine the category of an `Angle`:
+
+```dart
 myAngle.isAcute;
 myAngle.isObtuse;
 myAngle.isReflexive;
@@ -78,6 +84,8 @@ Rotate an `Angle`:
 final Rotation rotation = myAngle.rotate(Angle.fromDegrees(150));
 ```
 
+---
+
 ### Rotations
 
 `Angle`s are confined to values in (-360°, 360°). For values beyond this range, the concept of a `Rotation` is provided.
@@ -97,6 +105,8 @@ Reduce a `Rotation` to an `Angle`:
 ```dart
 Rotation.fromDegrees(540).reduceToAngle();
 ```
+
+---
 
 ### Polar Coordinates
 
@@ -127,7 +137,9 @@ Map a `PolarCoord` to a Cartesian `Point`:
 final Point point = PolarCoord(100, Angle.fromDegrees(45)).toCartesian();
 ```
 
-#### Cartesian Orientations
+---
+
+### Cartesian Orientations
 
 Different use-cases treat angles in different ways.
 
@@ -138,6 +150,8 @@ Flutter app screens treat the positive x-axis as a 0° angle, but then treats po
 Ship navigation treats the positive y-axis as a 0° angle and then treats positive angles as running clockwise.
 
 Each of these situations apply a different orientation when mapping an angle, or a polar coordinate, to a location in Cartesian space. This concept of orientation is supported by `superdeclarative_geometry` by way of `CartesianOrientation`s.
+
+Both `Angle` and `PolarCoord` support `CartesianOrientation` mappings.
 
 ```dart
 final polarCoord = PolarCoord(100, Angle.fromDegrees(30));
