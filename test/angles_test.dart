@@ -149,6 +149,16 @@ void main() {
     });
 
     group('Inspection', () {
+      test('reports positive and negative', () {
+        expect(Angle.fromDegrees(0).isPositive, true);
+        expect(Angle.fromDegrees(270).isPositive, true);
+        expect(Angle.fromDegrees(-270).isPositive, false);
+
+        expect(Angle.fromDegrees(0).isNegative, false);
+        expect(Angle.fromDegrees(-270).isNegative, true);
+        expect(Angle.fromDegrees(270).isNegative, false);
+      });
+
       test('reports acute', () {
         expect(Angle.fromDegrees(0).isAcute, true);
         expect(Angle.fromDegrees(0).category, AngleCategory.acute);
@@ -238,6 +248,14 @@ void main() {
     });
 
     group('alteration', () {
+      test('makes positive and negative', () {
+        expect(Angle.fromDegrees(270).makePositive(), Angle.fromDegrees(270));
+        expect(Angle.fromDegrees(-270).makePositive(), Angle.fromDegrees(90));
+
+        expect(Angle.fromDegrees(270).makeNegative(), Angle.fromDegrees(-90));
+        expect(Angle.fromDegrees(-270).makeNegative(), Angle.fromDegrees(-270));
+      });
+
       test('inversion', () {
         expect(Angle.fromDegrees(45).invert(), Angle.fromDegrees(315));
         expect(Angle.fromDegrees(315).invert(), Angle.fromDegrees(45));

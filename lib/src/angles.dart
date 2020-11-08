@@ -87,6 +87,12 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
   /// Angle expressed as a percentage.
   final num percent;
 
+  /// True if this `Angle` is greater than or equal to zero.
+  bool get isPositive => degrees >= 0;
+
+  /// True if this `Angle` is less than zero.
+  bool get isNegative => degrees < 0;
+
   /// True if this `Angle` is acute, i.e., in [0°, 90°).
   bool get isAcute => degrees.abs() < 90;
 
@@ -100,6 +106,20 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
   AngleCategory get category => isAcute
       ? AngleCategory.acute
       : isObtuse ? AngleCategory.obtuse : AngleCategory.reflex;
+
+  /// Returns a positive version of this `Angle`.
+  ///
+  /// If this `Angle` is already positive, this `Angle` is returned.
+  ///
+  /// If this `Angle` is negative, then its positive complement is returned.
+  Angle makePositive() => isPositive ? this : Angle.fromDegrees(360 + degrees);
+
+  /// Returns a negative version of this `Angle`.
+  ///
+  /// If this `Angle` is already negative, this `Angle` is returned.
+  ///
+  /// If this `Angle` is positive, then its negative complement is returned.
+  Angle makeNegative() => isNegative ? this : Angle.fromDegrees(degrees - 360);
 
   /// Converts a non-reflexive `Angle` to its reflexive complement, or a
   /// reflexive `Angle` to its non-reflexive complement, e.g., 90° -> 270° or
