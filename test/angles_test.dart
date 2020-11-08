@@ -298,19 +298,6 @@ void main() {
       });
     });
 
-    group('Orientation', () {
-      test('reports clockwise and counter-clockwise', () {
-        expect(Rotation.fromDegrees(45).isClockwise, true);
-        expect(Rotation.fromDegrees(45).isCounterClockwise, false);
-
-        expect(Rotation.fromDegrees(-45).isClockwise, false);
-        expect(Rotation.fromDegrees(-45).isCounterClockwise, true);
-
-        expect(Rotation.fromDegrees(0).isClockwise, true);
-        expect(Rotation.fromDegrees(0).isClockwise, true);
-      });
-    });
-
     group('Operands', () {
       test('inverts itself', () {
         expect(-Rotation.fromDegrees(90), Rotation.fromDegrees(-90));

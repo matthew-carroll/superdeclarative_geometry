@@ -4,26 +4,64 @@ import 'package:superdeclarative_geometry/src/polar_coords.dart';
 
 import 'angles.dart';
 
-/// Maps a `PolarCoord` to a Cartesian `Point` based on a given
-/// orientation, e.g., the direction of the 0° axis and whether the
-/// positive rotation direction is clockwise or counter-clockwise.
+/// Frame of reference for mapping `Angle`s and `PolarCoord`s to Cartesian
+/// coordinates.
+///
+/// `CartesianOrientation`s exist because the 0° axis and the positive direction
+/// of an `Angle` changes depending on use-case.
+///
+/// In mathematics a 0° angle points to the right, and a positive angle rotates
+/// counter-clockwise.
+///
+/// In screen space a 0° angle points to the right, and a positive angle rotates
+/// clockwise.
+///
+/// In ship navigation a 0° angle points up, and a positive angle rotates
+/// clockwise.
+///
+/// In each of the above use-cases, the exact same `Angle` or `PolarCoord`
+/// corresponds to different Cartesian coordinates due to the orientation.
 abstract class CartesianOrientation {
   static const CartesianOrientation screen = ScreenOrientation();
   static const CartesianOrientation math = MathOrientation();
   static const CartesianOrientation navigation = NavigationOrientation();
 
-  bool isClockwise(Angle angle);
+  /// Returns true if the given `angle` represents a clockwise movement from
+  /// the 0° axis, or false otherwise.
+  bool isAngleClockwise(Angle angle);
 
-  bool isCounterClockwise(Angle angle);
+  /// Returns true if the given `angle` represents a counter-clockwise movement
+  /// from the 0° axis, or false otherwise.
+  bool isAngleCounterClockwise(Angle angle);
 
-  Angle makeClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]);
+  /// Returns a clockwise version of the given `angle`, as seen through the
+  /// given `orientation`.
+  Angle makeAngleClockwise(Angle angle);
 
-  Angle makeCounterClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]);
+  /// Returns a counter-clockwise version of the given `angle`, as seen through
+  /// the given `orientation`.
+  Angle makeAngleCounterClockwise(Angle angle);
 
+  /// Returns true if the given `rotation` represents a clockwise movement from
+  /// the 0° axis, or false otherwise.
+  bool isRotationClockwise(Rotation rotation);
+
+  /// Returns true if the given `rotation` represents a counter-clockwise movement
+  /// from the 0° axis, or false otherwise.
+  bool isRotationCounterClockwise(Rotation rotation);
+
+  /// Returns a clockwise version of the given `rotation`, as seen through the
+  /// given `orientation`.
+  Rotation makeRotationClockwise(Rotation rotation);
+
+  /// Returns a counter-clockwise version of the given `rotation`, as seen through
+  /// the given `orientation`.
+  Rotation makeRotationCounterClockwise(Rotation rotation);
+
+  /// Maps the given `polarCoord` to Cartesian coordinates within this orientation.
   Point polarToCartesian(PolarCoord polarCoord);
 
+  /// Maps the given `cartesianCoord` within this orientation to a `PolarCoord`.
   PolarCoord cartesianToPolar(Point cartesianCoord);
 }
 
@@ -32,22 +70,40 @@ abstract class CartesianOrientation {
 class ScreenOrientation implements CartesianOrientation {
   const ScreenOrientation();
 
-  bool isClockwise(Angle angle) => angle.degrees >= 0;
+  @override
+  bool isAngleClockwise(Angle angle) => angle.degrees >= 0;
 
-  bool isCounterClockwise(Angle angle) => angle.degrees <= 0;
+  @override
+  bool isAngleCounterClockwise(Angle angle) => angle.degrees <= 0;
 
-  Angle makeClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+  @override
+  Angle makeAngleClockwise(Angle angle) {
     return angle.degrees >= 0.0
         ? angle
         : Angle.fromDegrees(360 + angle.degrees);
   }
 
-  Angle makeCounterClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+  @override
+  Angle makeAngleCounterClockwise(Angle angle) {
     return angle.degrees <= 0.0
         ? angle
         : Angle.fromDegrees(angle.degrees - 360);
+  }
+
+  bool isRotationClockwise(Rotation rotation) => rotation.degrees >= 0;
+
+  bool isRotationCounterClockwise(Rotation rotation) => rotation.degrees <= 0;
+
+  Rotation makeRotationClockwise(Rotation rotation) {
+    return isRotationClockwise(rotation)
+        ? rotation
+        : Rotation.fromDegrees(-rotation.degrees);
+  }
+
+  Rotation makeRotationCounterClockwise(Rotation rotation) {
+    return isRotationCounterClockwise(rotation)
+        ? rotation
+        : Rotation.fromDegrees(-rotation.degrees);
   }
 
   @override
@@ -70,22 +126,40 @@ class ScreenOrientation implements CartesianOrientation {
 class MathOrientation implements CartesianOrientation {
   const MathOrientation();
 
-  bool isClockwise(Angle angle) => angle.degrees <= 0;
+  @override
+  bool isAngleClockwise(Angle angle) => angle.degrees <= 0;
 
-  bool isCounterClockwise(Angle angle) => angle.degrees >= 0;
+  @override
+  bool isAngleCounterClockwise(Angle angle) => angle.degrees >= 0;
 
-  Angle makeClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+  @override
+  Angle makeAngleClockwise(Angle angle) {
     return angle.degrees <= 0.0
         ? angle
         : Angle.fromDegrees(angle.degrees - 360);
   }
 
-  Angle makeCounterClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+  @override
+  Angle makeAngleCounterClockwise(Angle angle) {
     return angle.degrees >= 0.0
         ? angle
         : Angle.fromDegrees(360 + angle.degrees);
+  }
+
+  bool isRotationClockwise(Rotation rotation) => rotation.degrees <= 0;
+
+  bool isRotationCounterClockwise(Rotation rotation) => rotation.degrees >= 0;
+
+  Rotation makeRotationClockwise(Rotation rotation) {
+    return isRotationClockwise(rotation)
+        ? rotation
+        : Rotation.fromDegrees(-rotation.degrees);
+  }
+
+  Rotation makeRotationCounterClockwise(Rotation rotation) {
+    return isRotationCounterClockwise(rotation)
+        ? rotation
+        : Rotation.fromDegrees(-rotation.degrees);
   }
 
   @override
@@ -108,22 +182,40 @@ class MathOrientation implements CartesianOrientation {
 class NavigationOrientation implements CartesianOrientation {
   const NavigationOrientation();
 
-  bool isClockwise(Angle angle) => angle.degrees >= 0;
+  @override
+  bool isAngleClockwise(Angle angle) => angle.degrees >= 0;
 
-  bool isCounterClockwise(Angle angle) => angle.degrees <= 0;
+  @override
+  bool isAngleCounterClockwise(Angle angle) => angle.degrees <= 0;
 
-  Angle makeClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+  @override
+  Angle makeAngleClockwise(Angle angle) {
     return angle.degrees >= 0.0
         ? angle
         : Angle.fromDegrees(360 + angle.degrees);
   }
 
-  Angle makeCounterClockwise(Angle angle,
-      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+  @override
+  Angle makeAngleCounterClockwise(Angle angle) {
     return angle.degrees <= 0.0
         ? angle
         : Angle.fromDegrees(angle.degrees - 360);
+  }
+
+  bool isRotationClockwise(Rotation rotation) => rotation.degrees <= 0;
+
+  bool isRotationCounterClockwise(Rotation rotation) => rotation.degrees >= 0;
+
+  Rotation makeRotationClockwise(Rotation rotation) {
+    return isRotationClockwise(rotation)
+        ? rotation
+        : Rotation.fromDegrees(-rotation.degrees);
+  }
+
+  Rotation makeRotationCounterClockwise(Rotation rotation) {
+    return isRotationCounterClockwise(rotation)
+        ? rotation
+        : Rotation.fromDegrees(-rotation.degrees);
   }
 
   @override
@@ -153,14 +245,15 @@ extension CartesianAngle on Angle {
   /// True if this `Angle` represents a clockwise arc, or zero.
   bool isClockwise(
           [CartesianOrientation orientation = CartesianOrientation.screen]) =>
-      orientation.isClockwise(this);
+      orientation.isAngleClockwise(this);
 
   /// True if this `Angle` represents a counter-clockwise arc, or zero.
   bool isCounterClockwise(
           [CartesianOrientation orientation = CartesianOrientation.screen]) =>
-      orientation.isCounterClockwise(this);
+      orientation.isAngleCounterClockwise(this);
 
-  /// Clockwise for positive angles, counter-clockwise for negative angles.
+  /// Returns `AngleDirection.clockwise` if this `Angle` is clockwise within
+  /// the given `orientation`, or `AngleDirection.counterClockwise` otherwise.
   AngleDirection direction(
           [CartesianOrientation orientation = CartesianOrientation.screen]) =>
       isClockwise(orientation)
@@ -170,13 +263,53 @@ extension CartesianAngle on Angle {
   /// Returns a clockwise version of this `Angle`.
   Angle makeClockwise(
       [CartesianOrientation orientation = CartesianOrientation.screen]) {
-    return orientation.makeClockwise(this);
+    return orientation.makeAngleClockwise(this);
   }
 
   /// Returns a counter-clockwise version of this `Angle`.
   Angle makeCounterClockwise(
       [CartesianOrientation orientation = CartesianOrientation.screen]) {
-    return orientation.makeCounterClockwise(this);
+    return orientation.makeAngleCounterClockwise(this);
+  }
+}
+
+/// Extensions for `Rotation` objects that introduce Cartesian concepts.
+///
+/// Clockwise and Counter-Clockwise: You might wonder why CW and CCW properties
+/// are defined here, rather than on `Rotation`, itself. Consider that when you
+/// look at a device screen, positive rotations move clockwise. When you look at
+/// a mathematical graph, positive rotations move counter-clockwise. A rotation in
+/// isolation cannot know whether it is CW or CCW. Thus, this directional
+/// concept is tied to a particular Cartesian orientation.
+extension CartesianRotation on Rotation {
+  /// True if this `Rotation` represents a clockwise turn, or zero.
+  bool isClockwise(
+          [CartesianOrientation orientation = CartesianOrientation.screen]) =>
+      orientation.isRotationClockwise(this);
+
+  /// True if this `Rotation` represents a counter-clockwise turn, or zero.
+  bool isCounterClockwise(
+          [CartesianOrientation orientation = CartesianOrientation.screen]) =>
+      orientation.isRotationCounterClockwise(this);
+
+  /// Returns `AngleDirection.clockwise` if this `Rotation` is clockwise within
+  /// the given `orientation`, or `AngleDirection.counterClockwise` otherwise.
+  AngleDirection direction(
+          [CartesianOrientation orientation = CartesianOrientation.screen]) =>
+      isClockwise(orientation)
+          ? AngleDirection.clockwise
+          : AngleDirection.counterclockwise;
+
+  /// Returns a clockwise version of this `Rotation`.
+  Rotation makeClockwise(
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return orientation.makeRotationClockwise(this);
+  }
+
+  /// Returns a counter-clockwise version of this `Rotation`.
+  Rotation makeCounterClockwise(
+      [CartesianOrientation orientation = CartesianOrientation.screen]) {
+    return orientation.makeRotationCounterClockwise(this);
   }
 }
 

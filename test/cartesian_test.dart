@@ -29,6 +29,30 @@ void main() {
       });
     });
 
+    group('Rotations', () {
+      test('reports clockwise and counter-clockwise', () {
+        expect(Rotation.fromDegrees(540).isClockwise(), true);
+        expect(Rotation.fromDegrees(540).isCounterClockwise(), false);
+
+        expect(Rotation.fromDegrees(-540).isClockwise(), false);
+        expect(Rotation.fromDegrees(-540).isCounterClockwise(), true);
+
+        expect(Rotation.fromDegrees(0).isClockwise(), true);
+        expect(Rotation.fromDegrees(0).isClockwise(), true);
+      });
+
+      test('make clockwise and counterclockwise', () {
+        expect(Rotation.fromDegrees(540).makeClockwise(),
+            Rotation.fromDegrees(540));
+        expect(Rotation.fromDegrees(540).makeCounterClockwise(),
+            Rotation.fromDegrees(-540));
+        expect(Rotation.fromDegrees(-540).makeClockwise(),
+            Rotation.fromDegrees(540));
+        expect(Rotation.fromDegrees(-540).makeCounterClockwise(),
+            Rotation.fromDegrees(-540));
+      });
+    });
+
     group('PolarCoords', () {
       group('Construction', () {
         test('creates a PolarCoord from a Cartesian Point', () {

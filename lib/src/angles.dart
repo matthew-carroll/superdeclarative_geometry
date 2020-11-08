@@ -1,5 +1,3 @@
-// Idea: Angle for opening between 2 rays. Rotation for angles of arbitrary size.
-
 import 'dart:math';
 import 'dart:ui';
 
@@ -163,7 +161,7 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
   /// Adds the `other` `Angle` to this `Angle`, producing a `Rotation`.
   ///
   /// The difference between a `Rotation` and an `Angle` is that a `Rotation`
-  /// can be arbitrarily large in the clockwise or counter-clockwise direction.
+  /// can be arbitrarily large in the positive or negative direction.
   Rotation rotate(Angle other) {
     return Rotation.fromDegrees(degrees + other.degrees);
   }
@@ -233,16 +231,7 @@ class Rotation {
   /// Angle expressed as radians.
   final num radians;
 
-  /// True if this `Angle` represents a clockwise arc, or zero.
-  // TODO: I think this needs a CartesianOrientation to determine CW
-  bool get isClockwise => degrees >= 0;
-
-  /// True if this `Angle` represents a counter-clockwise arc, or zero.
-  // TODO: I think this needs a CartesianOrientation to determine CW
-  bool get isCounterClockwise => degrees <= 0;
-
-  /// Returns an inverted version of this `Rotation`, i.e., clockwise to
-  /// counter-clockwise, or counter-clockwise to clockwise.
+  /// Returns an inverted version of this `Rotation`, e.g., -90° to 90°.
   operator -() {
     return Rotation.fromDegrees(-degrees);
   }
