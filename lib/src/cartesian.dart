@@ -42,6 +42,9 @@ abstract class CartesianOrientation {
   /// the given `orientation`.
   Angle makeAngleCounterClockwise(Angle angle);
 
+  /// Returns the given `angle` as seen by a screen's coordinate system.
+  Angle toScreenAngle(Angle angle);
+
   /// Returns true if the given `rotation` represents a clockwise movement from
   /// the 0° axis, or false otherwise.
   bool isRotationClockwise(Rotation rotation);
@@ -58,11 +61,20 @@ abstract class CartesianOrientation {
   /// the given `orientation`.
   Rotation makeRotationCounterClockwise(Rotation rotation);
 
+  /// Returns the given `rotation` as seen by a screen's coordinate system.
+  Rotation toScreenRotation(Rotation rotation);
+
   /// Maps the given `polarCoord` to Cartesian coordinates within this orientation.
   Point polarToCartesian(PolarCoord polarCoord);
 
   /// Maps the given `cartesianCoord` within this orientation to a `PolarCoord`.
   PolarCoord cartesianToPolar(Point cartesianCoord);
+
+  /// Returns the given `point` as seen by a screen's coordinate system.
+  Point toScreenPoint(Point point);
+
+  /// Returns the given screen-based `point` as seen by this coordinate system.
+  Point fromScreenPoint(Point point);
 }
 
 /// Orientation with a reference direction pointing to the right, with a
@@ -90,6 +102,11 @@ class ScreenOrientation implements CartesianOrientation {
         : Angle.fromDegrees(angle.degrees - 360);
   }
 
+  @override
+  Angle toScreenAngle(Angle angle) {
+    return angle;
+  }
+
   bool isRotationClockwise(Rotation rotation) => rotation.degrees >= 0;
 
   bool isRotationCounterClockwise(Rotation rotation) => rotation.degrees <= 0;
@@ -107,6 +124,11 @@ class ScreenOrientation implements CartesianOrientation {
   }
 
   @override
+  Rotation toScreenRotation(Rotation rotation) {
+    return rotation;
+  }
+
+  @override
   Point<num> polarToCartesian(PolarCoord polarCoord) {
     return Point(
       polarCoord.radius * cos(polarCoord.angle.radians),
@@ -118,6 +140,16 @@ class ScreenOrientation implements CartesianOrientation {
   PolarCoord cartesianToPolar(Point<num> point) {
     return PolarCoord(
         point.magnitude, Angle.fromRadians(atan2(point.y, point.x)));
+  }
+
+  @override
+  Point toScreenPoint(Point point) {
+    return point;
+  }
+
+  @override
+  Point fromScreenPoint(Point point) {
+    return point;
   }
 }
 
@@ -146,6 +178,11 @@ class MathOrientation implements CartesianOrientation {
         : Angle.fromDegrees(360 + angle.degrees);
   }
 
+  @override
+  Angle toScreenAngle(Angle angle) {
+    return -angle;
+  }
+
   bool isRotationClockwise(Rotation rotation) => rotation.degrees <= 0;
 
   bool isRotationCounterClockwise(Rotation rotation) => rotation.degrees >= 0;
@@ -163,22 +200,43 @@ class MathOrientation implements CartesianOrientation {
   }
 
   @override
+  Rotation toScreenRotation(Rotation rotation) {
+    return -rotation;
+  }
+
+  @override
   Point<num> polarToCartesian(PolarCoord polarCoord) {
     return Point(
       polarCoord.radius * cos(polarCoord.angle.radians),
-      polarCoord.radius * -sin(polarCoord.angle.radians),
+      polarCoord.radius * sin(polarCoord.angle.radians),
     );
   }
 
   @override
   PolarCoord cartesianToPolar(Point<num> point) {
     return PolarCoord(
-        point.magnitude, -Angle.fromRadians(atan2(point.y, point.x)));
+      point.magnitude,
+      Angle.fromRadians(atan2(point.y, point.x)),
+    );
+  }
+
+  @override
+  Point toScreenPoint(Point point) {
+    return Point(point.x, -point.y);
+  }
+
+  @override
+  Point fromScreenPoint(Point point) {
+    return Point(point.x, -point.y);
   }
 }
 
 /// Orientation with a reference direction pointing up from the origin, with
 /// a clockwise rotation.
+// TODO: Right now navigation is coded to use the same coordinate system as the
+//       screen, but I think the zero axis should be the y-axis and then the
+//       quadrants should start in the upper right with Q1 and then go
+//       clockwise.
 class NavigationOrientation implements CartesianOrientation {
   const NavigationOrientation();
 
@@ -202,6 +260,11 @@ class NavigationOrientation implements CartesianOrientation {
         : Angle.fromDegrees(angle.degrees - 360);
   }
 
+  @override
+  Angle toScreenAngle(Angle angle) {
+    return angle - Angle.deg90;
+  }
+
   bool isRotationClockwise(Rotation rotation) => rotation.degrees <= 0;
 
   bool isRotationCounterClockwise(Rotation rotation) => rotation.degrees >= 0;
@@ -219,6 +282,11 @@ class NavigationOrientation implements CartesianOrientation {
   }
 
   @override
+  Rotation toScreenRotation(Rotation rotation) {
+    return rotation + Rotation.fromAngle(Angle.deg90);
+  }
+
+  @override
   Point<num> polarToCartesian(PolarCoord polarCoord) {
     return Point(
       polarCoord.radius * cos((polarCoord.angle - Angle.deg90).radians),
@@ -228,8 +296,20 @@ class NavigationOrientation implements CartesianOrientation {
 
   @override
   PolarCoord cartesianToPolar(Point<num> point) {
-    return PolarCoord(point.magnitude,
-        Angle.fromRadians(atan2(point.y, point.x)) + Angle.deg90);
+    return PolarCoord(
+      point.magnitude,
+      Angle.fromRadians(atan2(point.y, point.x)) + Angle.deg90,
+    );
+  }
+
+  @override
+  Point toScreenPoint(Point point) {
+    return point;
+  }
+
+  @override
+  Point fromScreenPoint(Point point) {
+    return point;
   }
 }
 
@@ -332,5 +412,34 @@ extension CartesianPolarCoord on PolarCoord {
     CartesianOrientation orientation = CartesianOrientation.screen,
   }) {
     return orientation.polarToCartesian(this);
+  }
+
+  /// Returns a `PolarCoord` that is equivalent to this `PolarCoord` offset
+  /// by the given `delta` in the given `orientation`.
+  PolarCoord moveInCartesianSpace(
+    Point delta, {
+    CartesianOrientation orientation = CartesianOrientation.screen,
+  }) {
+    return CartesianPolarCoords.fromPoint(
+      this.toCartesian(orientation: orientation) + delta,
+      orientation,
+    );
+  }
+}
+
+extension CartesianPoint on Point {
+  Point toScreenPoint({
+    CartesianOrientation fromOrientation,
+  }) {
+    assert(fromOrientation != null, 'A "fromOrientation" must be provided.');
+    return fromOrientation.toScreenPoint(this);
+  }
+
+  Point fromScreenTo(CartesianOrientation orientation) {
+    return orientation.fromScreenPoint(this);
+  }
+
+  Point translate(Point offset) {
+    return Point(this.x + offset.x, this.y + offset.y);
   }
 }

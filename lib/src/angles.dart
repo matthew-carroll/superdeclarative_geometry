@@ -16,12 +16,12 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
   }
 
   // Convenient constant Angles.
-  static Angle zero = const Angle.fromDegrees(0);
-  static Angle deg30 = const Angle.fromDegrees(30);
-  static Angle deg45 = const Angle.fromDegrees(45);
-  static Angle deg60 = const Angle.fromDegrees(60);
-  static Angle deg90 = const Angle.fromDegrees(90);
-  static Angle deg180 = const Angle.fromDegrees(180);
+  static const Angle zero = const Angle.fromDegrees(0);
+  static const Angle deg30 = const Angle.fromDegrees(30);
+  static const Angle deg45 = const Angle.fromDegrees(45);
+  static const Angle deg60 = const Angle.fromDegrees(60);
+  static const Angle deg90 = const Angle.fromDegrees(90);
+  static const Angle deg180 = const Angle.fromDegrees(180);
 
   static const _maxDegrees = 360;
   static const _maxRadians = 2 * pi;

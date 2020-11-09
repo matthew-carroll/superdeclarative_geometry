@@ -97,7 +97,7 @@ void main() {
           expect(
               PolarCoord(100, Angle.fromDegrees(90))
                   .toCartesian(orientation: CartesianOrientation.math),
-              isApproximatelyPoint(Point(0, -100)));
+              isApproximatelyPoint(Point(0, 100)));
           expect(
               PolarCoord(100, Angle.fromDegrees(180))
                   .toCartesian(orientation: CartesianOrientation.math),
@@ -105,7 +105,7 @@ void main() {
           expect(
               PolarCoord(100, Angle.fromDegrees(270))
                   .toCartesian(orientation: CartesianOrientation.math),
-              isApproximatelyPoint(Point(0, 100)));
+              isApproximatelyPoint(Point(0, -100)));
         });
 
         test('maps PolarCoords to navigation-oriented Cartesian Points', () {
