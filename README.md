@@ -115,7 +115,7 @@ Define polar coordinates by a radius and an angle, or by a Cartesian point:
 ```dart
 PolarCoord(100, PolarCoord.fromDegrees(45));
 
-PolarCoord.fromCartesian(0, 100);
+CartesianPolarCoords.fromPoint(Point(0, 100));
 ```
 
 Add, subtract, multiply, and divide `PolarCoord`s:
