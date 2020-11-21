@@ -423,7 +423,7 @@ class _GraphPainter extends CustomPainter {
     final Angle primaryAngleSweep =
         _graphOrientation.toScreenAngle(primaryAngle) - primaryAngleStart;
     final Angle complementaryAngleStart = primaryAngleSweep + primaryAngleStart;
-    final Angle complementaryAngleSweep = primaryAngleSweep.invert();
+    final Angle complementaryAngleSweep = primaryAngleSweep.complement;
 
     // Paint a filled arc from the zero-axis to the polarCoord.
     canvas.drawArc(

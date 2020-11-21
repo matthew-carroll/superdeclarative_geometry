@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'angles.dart';
+import '_angles.dart';
 
 /// Adds standard trigonometry calculations to `Angle`.
 extension AngleTrigonomotry on Angle {

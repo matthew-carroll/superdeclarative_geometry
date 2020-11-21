@@ -251,7 +251,7 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.0.1-dev.1"
+    version: "0.1.0"
   term_glyph:
     dependency: transitive
     description:
@@ -328,7 +328,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.7.3"
+    version: "1.7.4"
   xdg_directories:
     dependency: transitive
     description:

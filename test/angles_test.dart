@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:dart_test_matchers/matchers.dart';
-import 'package:superdeclarative_geometry/src/angles.dart';
-import 'package:superdeclarative_geometry/src/common.dart';
+import 'package:dart_test_matchers/dart_test_matchers.dart';
+import 'package:superdeclarative_geometry/src/_angles.dart';
+import 'package:superdeclarative_geometry/src/_common.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -257,11 +257,12 @@ void main() {
       });
 
       test('inversion', () {
-        expect(Angle.fromDegrees(45).invert(), Angle.fromDegrees(315));
-        expect(Angle.fromDegrees(315).invert(), Angle.fromDegrees(45));
-        expect(Angle.fromDegrees(-45).invert(), Angle.fromDegrees(-315));
-        expect(Angle.fromDegrees(-315).invert(), Angle.fromDegrees(-45));
-        expect(Angle.fromDegrees(45).invert().invert(), Angle.fromDegrees(45));
+        expect(Angle.fromDegrees(45).complement, Angle.fromDegrees(315));
+        expect(Angle.fromDegrees(315).complement, Angle.fromDegrees(45));
+        expect(Angle.fromDegrees(-45).complement, Angle.fromDegrees(-315));
+        expect(Angle.fromDegrees(-315).complement, Angle.fromDegrees(-45));
+        expect(
+            Angle.fromDegrees(45).complement.complement, Angle.fromDegrees(45));
       });
 
       test('rotates an angle', () {

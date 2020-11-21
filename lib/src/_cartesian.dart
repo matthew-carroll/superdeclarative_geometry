@@ -1,8 +1,8 @@
 import 'dart:math';
 
-import 'package:superdeclarative_geometry/src/polar_coords.dart';
+import 'package:superdeclarative_geometry/src/_polar_coords.dart';
 
-import 'angles.dart';
+import '_angles.dart';
 
 /// Frame of reference for mapping `Angle`s and `PolarCoord`s to Cartesian
 /// coordinates.

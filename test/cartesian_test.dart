@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:superdeclarative_geometry/superdeclarative_geometry.dart';
+import 'package:test/test.dart';
 
 import 'common.dart';
 

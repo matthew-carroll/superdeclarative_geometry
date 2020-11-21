@@ -1,7 +1,6 @@
 import 'dart:math';
-import 'dart:ui';
 
-import 'common.dart';
+import '_common.dart';
 
 /// Canonical mathematical concept of an "angle".
 ///
@@ -12,7 +11,7 @@ import 'common.dart';
 class Angle implements Equivalency<Angle>, Approximately<Angle> {
   /// Linearly interpolates between `a1` and `a2` at time/percent `t`.
   static Angle lerp(Angle a1, Angle a2, double t) {
-    return Angle.fromRadians(lerpDouble(a1.radians, a2.radians, t));
+    return Angle.fromRadians(a1.radians + ((a2.radians - a1.radians) * t));
   }
 
   // Convenient constant Angles.
@@ -122,7 +121,7 @@ class Angle implements Equivalency<Angle>, Approximately<Angle> {
   /// Converts a non-reflexive `Angle` to its reflexive complement, or a
   /// reflexive `Angle` to its non-reflexive complement, e.g., 90° -> 270° or
   /// 270° -> 90°.
-  Angle invert() {
+  Angle get complement {
     return Angle.fromDegrees((360 - degrees.abs()) * degrees.sign);
   }
 

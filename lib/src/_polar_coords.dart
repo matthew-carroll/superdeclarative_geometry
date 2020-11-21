@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import 'angles.dart';
-//import 'cartesian.dart';
-import 'common.dart';
+import '_angles.dart';
+import '_common.dart';
 
 /// Canonical mathematical concept of a "polar coordinate".
 ///
@@ -96,9 +95,9 @@ class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
     // Ensure the Angle is reflexive or non-reflexive based on preference.
     if (chooseReflexAngle != null) {
       if (angleBetween.isReflexive && !chooseReflexAngle) {
-        angleBetween = angleBetween.invert();
+        angleBetween = angleBetween.complement;
       } else if (!angleBetween.isReflexive && chooseReflexAngle) {
-        angleBetween = angleBetween.invert();
+        angleBetween = angleBetween.complement;
       }
     }
 
