@@ -1,4 +1,9 @@
-.idea
 .dart_tool
 .packages
 build
+
+# IntelliJ Project
+# Ignore the root .idea folder except the runConfigurations folder
+!idea/
+.idea/*
+!/.idea/runConfigurations/
