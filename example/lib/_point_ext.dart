@@ -4,7 +4,7 @@ import 'dart:ui';
 
 extension FlutterPoint on Point {
   Offset toOffset() {
-    return Offset(this.x, this.y);
+    return Offset(this.x.toDouble(), this.y.toDouble());
   }
 }
 

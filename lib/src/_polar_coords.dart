@@ -40,12 +40,9 @@ class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
     // Equation pull from:
     // https://math.stackexchange.com/questions/1365622/adding-two-polar-vectors
     return PolarCoord(
-      sqrt(pow(radius, 2) +
-          pow(other.radius, 2) +
-          (2 * radius * other.radius * cos((other.angle - angle).radians))),
+      sqrt(pow(radius, 2) + pow(other.radius, 2) + (2 * radius * other.radius * cos((other.angle - angle).radians))),
       angle +
-          Angle.fromRadians(atan2(
-              other.radius * sin((other.angle - angle).radians),
+          Angle.fromRadians(atan2(other.radius * sin((other.angle - angle).radians),
               radius + (other.radius * cos((other.angle - angle).radians)))),
     );
   }
@@ -88,7 +85,7 @@ class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
   /// respectively.
   Angle angleBetween(
     PolarCoord other, {
-    bool chooseReflexAngle,
+    bool? chooseReflexAngle,
   }) {
     Angle angleBetween = angle - other.angle;
 
@@ -118,10 +115,7 @@ class PolarCoord implements Equivalency<PolarCoord>, Approximately<PolarCoord> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is PolarCoord &&
-          runtimeType == other.runtimeType &&
-          radius == other.radius &&
-          angle == other.angle;
+      other is PolarCoord && runtimeType == other.runtimeType && radius == other.radius && angle == other.angle;
 
   @override
   int get hashCode => radius.hashCode ^ angle.hashCode;

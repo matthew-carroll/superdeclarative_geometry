@@ -11,9 +11,8 @@ class EggTimerPage extends StatefulWidget {
   _EggTimerPageState createState() => _EggTimerPageState();
 }
 
-class _EggTimerPageState extends State<EggTimerPage>
-    with TickerProviderStateMixin {
-  EggTimer _eggTimer;
+class _EggTimerPageState extends State<EggTimerPage> with TickerProviderStateMixin {
+  late EggTimer _eggTimer;
 
   @override
   void initState() {
@@ -96,7 +95,7 @@ class _EggTimerPageState extends State<EggTimerPage>
     return AnimatedOpacity(
       opacity: _eggTimer.state == _EggTimerState.paused ? 1.0 : 0.0,
       duration: const Duration(milliseconds: 250),
-      child: SizedBox(
+      child: Container(
         height: 80,
         child: Row(
           children: [
@@ -120,11 +119,11 @@ class _EggTimerPageState extends State<EggTimerPage>
   }
 
   Widget _buildIconTextButton({
-    @required IconData icon,
-    @required String title,
-    @required VoidCallback onPressed,
+    required IconData icon,
+    required String title,
+    required VoidCallback onPressed,
   }) {
-    return FlatButton(
+    return TextButton(
       onPressed: onPressed,
       child: Row(
         children: [
@@ -138,12 +137,15 @@ class _EggTimerPageState extends State<EggTimerPage>
 
   Widget _buildStartAndPauseControls() {
     if (_eggTimer.state == _EggTimerState.ready) {
-      return SizedBox();
+      return SizedBox(
+        height: 54,
+      );
     }
 
-    IconData icon;
-    String title;
-    VoidCallback onPressed;
+    late IconData icon;
+    late String title;
+    late VoidCallback onPressed;
+
     if (_eggTimer.state == _EggTimerState.running) {
       icon = Icons.pause;
       title = 'PAUSE';
@@ -154,9 +156,11 @@ class _EggTimerPageState extends State<EggTimerPage>
       onPressed = _eggTimer.resume;
     }
 
-    return RaisedButton(
-      color: Colors.white,
-      elevation: 0,
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        onSurface: Colors.white,
+        elevation: 0,
+      ),
       onPressed: onPressed,
       child: SizedBox(
         width: double.infinity,
@@ -178,8 +182,8 @@ class _EggTimerPageState extends State<EggTimerPage>
 
 class EggTimerDial extends StatefulWidget {
   const EggTimerDial({
-    Key key,
-    @required this.eggTimer,
+    Key? key,
+    required this.eggTimer,
     this.maxTime = const Duration(minutes: 15),
   }) : super(key: key);
 
@@ -190,18 +194,17 @@ class EggTimerDial extends StatefulWidget {
   _EggTimerDialState createState() => _EggTimerDialState();
 }
 
-class _EggTimerDialState extends State<EggTimerDial>
-    with SingleTickerProviderStateMixin {
+class _EggTimerDialState extends State<EggTimerDial> with SingleTickerProviderStateMixin {
   Angle _angle = Angle.zero;
 
-  _EggTimerState _prevTimerState;
+  late _EggTimerState _prevTimerState;
 
   bool _isDragging = false;
-  Angle _angleWhenDragStarted;
-  Offset _dragStart;
+  late Angle _angleWhenDragStarted;
+  late Offset _dragStart;
 
-  Angle _angleBeforeReset;
-  AnimationController _resetAnimationController;
+  late Angle _angleBeforeReset;
+  late AnimationController _resetAnimationController;
 
   @override
   void initState() {
@@ -212,8 +215,7 @@ class _EggTimerDialState extends State<EggTimerDial>
       duration: const Duration(milliseconds: 500),
     )..addListener(() {
         setState(() {
-          _angle = Angle.lerp(
-              _angleBeforeReset, Angle.zero, _resetAnimationController.value);
+          _angle = Angle.lerp(_angleBeforeReset, Angle.zero, _resetAnimationController.value);
         });
       });
 
@@ -231,8 +233,7 @@ class _EggTimerDialState extends State<EggTimerDial>
   }
 
   void _onEggTimerChange() {
-    if (_prevTimerState != _EggTimerState.ready &&
-        widget.eggTimer.state == _EggTimerState.ready) {
+    if (_prevTimerState != _EggTimerState.ready && widget.eggTimer.state == _EggTimerState.ready) {
       // The egg timer was reset. Animate back to zero.
       _angleBeforeReset = _angle;
       _resetAnimationController.forward(from: 0.0);
@@ -242,8 +243,7 @@ class _EggTimerDialState extends State<EggTimerDial>
 
     if (!_isDragging) {
       setState(() {
-        _angle = Angle.fromPercent(
-            widget.eggTimer.time.inSeconds / widget.maxTime.inSeconds);
+        _angle = Angle.fromPercent(widget.eggTimer.time.inSeconds / widget.maxTime.inSeconds);
       });
     }
   }
@@ -276,9 +276,7 @@ class _EggTimerDialState extends State<EggTimerDial>
     );
 
     // Calculate the angle between the two PolarCoords.
-    final angle =
-        (currentDragPolar.angleBetween(dragStartPolar) + _angleWhenDragStarted)
-            .makePositive();
+    final angle = (currentDragPolar.angleBetween(dragStartPolar) + _angleWhenDragStarted).makePositive();
 
     setState(() {
       _angle = angle;
@@ -298,8 +296,7 @@ class _EggTimerDialState extends State<EggTimerDial>
 
   void _setTimerToAngle() {
     final startTimeExact = widget.maxTime * (_angle.degrees / 360);
-    final startTime =
-        Duration(minutes: (startTimeExact.inSeconds / 60).round());
+    final startTime = Duration(minutes: (startTimeExact.inSeconds / 60).round());
 
     widget.eggTimer.setTimer(startTime);
   }
@@ -415,7 +412,7 @@ class _EggTimerDialState extends State<EggTimerDial>
         ),
         child: new Center(
           child: new Transform(
-            transform: new Matrix4.rotationZ(angle.radians),
+            transform: new Matrix4.rotationZ(angle.radians.toDouble()),
             alignment: Alignment.center,
             child: new Image.asset(
               'assets/logo_mascot_icon.png',
@@ -502,11 +499,11 @@ class TickPainter extends CustomPainter {
 
         switch (quadrant) {
           case 4:
-            canvas.rotate(-Angle.deg90.radians);
+            canvas.rotate(-Angle.deg90.radians.toDouble());
             break;
           case 2:
           case 3:
-            canvas.rotate(Angle.deg90.radians);
+            canvas.rotate(Angle.deg90.radians.toDouble());
             break;
         }
 
@@ -524,7 +521,7 @@ class TickPainter extends CustomPainter {
       // TODO: example of where not having a full circle rotation is annoying
       // Ideally:
       // canvas.rotate((Angle.deg360 / tickCount).radians);
-      canvas.rotate(Angle.fromDegrees(360 / tickCount).radians);
+      canvas.rotate(Angle.fromDegrees(360 / tickCount).radians.toDouble());
     }
 
     canvas.restore();
@@ -539,13 +536,13 @@ class TickPainter extends CustomPainter {
 /// Paints a small black arrow pointing in the given `angle` direction in
 /// screen orientation.
 class ArrowPainter extends CustomPainter {
-  final Paint dialArrowPaint;
-  final Angle angle;
-
-  ArrowPainter({this.angle}) : dialArrowPaint = new Paint() {
+  ArrowPainter({required this.angle}) : dialArrowPaint = new Paint() {
     dialArrowPaint.color = Colors.black;
     dialArrowPaint.style = PaintingStyle.fill;
   }
+
+  final Paint dialArrowPaint;
+  final Angle angle;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -553,7 +550,7 @@ class ArrowPainter extends CustomPainter {
 
     final radius = size.height / 2;
     canvas.translate(radius, radius);
-    canvas.rotate(angle.radians);
+    canvas.rotate(angle.radians.toDouble());
 
     Path path = new Path();
     path.moveTo(0.0, -radius - 10.0);
@@ -583,7 +580,7 @@ class EggTimerOrientation extends NavigationOrientation {
 /// resumed, and stopped.
 class EggTimer with ChangeNotifier {
   EggTimer({
-    @required TickerProvider tickerProvider,
+    required TickerProvider tickerProvider,
   }) : _tickerProvider = tickerProvider;
 
   void dispose() {
@@ -593,7 +590,7 @@ class EggTimer with ChangeNotifier {
 
   final TickerProvider _tickerProvider;
 
-  Ticker _ticker;
+  Ticker? _ticker;
 
   _EggTimerState state = _EggTimerState.ready;
 
@@ -639,7 +636,7 @@ class EggTimer with ChangeNotifier {
   void pause() {
     if (state == _EggTimerState.running) {
       state = _EggTimerState.paused;
-      _ticker.stop();
+      _ticker!.stop();
       notifyListeners();
     } else {
       print('Cannot pause an EggTimer that is not running.');
@@ -651,7 +648,7 @@ class EggTimer with ChangeNotifier {
     if (state == _EggTimerState.paused) {
       state = _EggTimerState.running;
       _tickStartTime = _timeRemaining;
-      _ticker.start();
+      _ticker!.start();
       notifyListeners();
     } else {
       print('Cannot resume an EggTimer that is not paused.');
@@ -661,13 +658,13 @@ class EggTimer with ChangeNotifier {
   /// Starts the timer ticking from the previous countdown start time.
   void restart() {
     if (state == _EggTimerState.paused) {
-      _ticker.stop();
+      _ticker!.stop();
 
       _tickStartTime = _countdown;
       _timeRemaining = _countdown;
 
       state = _EggTimerState.running;
-      _ticker.start();
+      _ticker!.start();
 
       notifyListeners();
     } else {
@@ -691,7 +688,7 @@ class EggTimer with ChangeNotifier {
   void _tick(Duration elapsedTime) {
     _timeRemaining = _tickStartTime - elapsedTime;
     if (_timeRemaining <= Duration.zero) {
-      _ticker.stop();
+      _ticker!.stop();
       _timeRemaining = Duration.zero;
       state = _EggTimerState.ready;
     }

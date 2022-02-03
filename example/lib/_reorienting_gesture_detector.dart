@@ -14,8 +14,8 @@ class ReorientedGestureDetector extends StatefulWidget {
   }
 
   const ReorientedGestureDetector({
-    Key key,
-    @required this.origin,
+    Key? key,
+    required this.origin,
     this.pointMapper,
     this.child,
     this.onTapDown,
@@ -70,62 +70,61 @@ class ReorientedGestureDetector extends StatefulWidget {
   }) : super(key: key);
 
   final OriginSelector origin;
-  final PointMapper pointMapper;
-  final Widget child;
+  final PointMapper? pointMapper;
+  final Widget? child;
 
-  final GestureTapDownCallback onTapDown;
-  final GestureTapUpCallback onTapUp;
-  final GestureTapCallback onTap;
-  final GestureTapCancelCallback onTapCancel;
-  final GestureTapCallback onSecondaryTap;
-  final GestureTapDownCallback onSecondaryTapDown;
-  final GestureTapUpCallback onSecondaryTapUp;
-  final GestureTapCancelCallback onSecondaryTapCancel;
-  final GestureTapDownCallback onTertiaryTapDown;
-  final GestureTapUpCallback onTertiaryTapUp;
-  final GestureTapCancelCallback onTertiaryTapCancel;
-  final GestureTapDownCallback onDoubleTapDown;
-  final GestureTapCallback onDoubleTap;
-  final GestureTapCancelCallback onDoubleTapCancel;
-  final GestureLongPressCallback onLongPress;
-  final GestureLongPressStartCallback onLongPressStart;
-  final GestureLongPressMoveUpdateCallback onLongPressMoveUpdate;
-  final GestureLongPressUpCallback onLongPressUp;
-  final GestureLongPressEndCallback onLongPressEnd;
-  final GestureLongPressCallback onSecondaryLongPress;
-  final GestureLongPressStartCallback onSecondaryLongPressStart;
-  final GestureLongPressMoveUpdateCallback onSecondaryLongPressMoveUpdate;
-  final GestureLongPressUpCallback onSecondaryLongPressUp;
-  final GestureLongPressEndCallback onSecondaryLongPressEnd;
-  final GestureDragDownCallback onVerticalDragDown;
-  final GestureDragStartCallback onVerticalDragStart;
-  final GestureDragUpdateCallback onVerticalDragUpdate;
-  final GestureDragEndCallback onVerticalDragEnd;
-  final GestureDragCancelCallback onVerticalDragCancel;
-  final GestureDragDownCallback onHorizontalDragDown;
-  final GestureDragStartCallback onHorizontalDragStart;
-  final GestureDragUpdateCallback onHorizontalDragUpdate;
-  final GestureDragEndCallback onHorizontalDragEnd;
-  final GestureDragCancelCallback onHorizontalDragCancel;
-  final GestureDragDownCallback onPanDown;
-  final GestureDragStartCallback onPanStart;
-  final GestureDragUpdateCallback onPanUpdate;
-  final GestureDragEndCallback onPanEnd;
-  final GestureDragCancelCallback onPanCancel;
-  final GestureScaleStartCallback onScaleStart;
-  final GestureScaleUpdateCallback onScaleUpdate;
-  final GestureScaleEndCallback onScaleEnd;
-  final GestureForcePressStartCallback onForcePressStart;
-  final GestureForcePressPeakCallback onForcePressPeak;
-  final GestureForcePressUpdateCallback onForcePressUpdate;
-  final GestureForcePressEndCallback onForcePressEnd;
-  final HitTestBehavior behavior;
+  final GestureTapDownCallback? onTapDown;
+  final GestureTapUpCallback? onTapUp;
+  final GestureTapCallback? onTap;
+  final GestureTapCancelCallback? onTapCancel;
+  final GestureTapCallback? onSecondaryTap;
+  final GestureTapDownCallback? onSecondaryTapDown;
+  final GestureTapUpCallback? onSecondaryTapUp;
+  final GestureTapCancelCallback? onSecondaryTapCancel;
+  final GestureTapDownCallback? onTertiaryTapDown;
+  final GestureTapUpCallback? onTertiaryTapUp;
+  final GestureTapCancelCallback? onTertiaryTapCancel;
+  final GestureTapDownCallback? onDoubleTapDown;
+  final GestureTapCallback? onDoubleTap;
+  final GestureTapCancelCallback? onDoubleTapCancel;
+  final GestureLongPressCallback? onLongPress;
+  final GestureLongPressStartCallback? onLongPressStart;
+  final GestureLongPressMoveUpdateCallback? onLongPressMoveUpdate;
+  final GestureLongPressUpCallback? onLongPressUp;
+  final GestureLongPressEndCallback? onLongPressEnd;
+  final GestureLongPressCallback? onSecondaryLongPress;
+  final GestureLongPressStartCallback? onSecondaryLongPressStart;
+  final GestureLongPressMoveUpdateCallback? onSecondaryLongPressMoveUpdate;
+  final GestureLongPressUpCallback? onSecondaryLongPressUp;
+  final GestureLongPressEndCallback? onSecondaryLongPressEnd;
+  final GestureDragDownCallback? onVerticalDragDown;
+  final GestureDragStartCallback? onVerticalDragStart;
+  final GestureDragUpdateCallback? onVerticalDragUpdate;
+  final GestureDragEndCallback? onVerticalDragEnd;
+  final GestureDragCancelCallback? onVerticalDragCancel;
+  final GestureDragDownCallback? onHorizontalDragDown;
+  final GestureDragStartCallback? onHorizontalDragStart;
+  final GestureDragUpdateCallback? onHorizontalDragUpdate;
+  final GestureDragEndCallback? onHorizontalDragEnd;
+  final GestureDragCancelCallback? onHorizontalDragCancel;
+  final GestureDragDownCallback? onPanDown;
+  final GestureDragStartCallback? onPanStart;
+  final GestureDragUpdateCallback? onPanUpdate;
+  final GestureDragEndCallback? onPanEnd;
+  final GestureDragCancelCallback? onPanCancel;
+  final GestureScaleStartCallback? onScaleStart;
+  final GestureScaleUpdateCallback? onScaleUpdate;
+  final GestureScaleEndCallback? onScaleEnd;
+  final GestureForcePressStartCallback? onForcePressStart;
+  final GestureForcePressPeakCallback? onForcePressPeak;
+  final GestureForcePressUpdateCallback? onForcePressUpdate;
+  final GestureForcePressEndCallback? onForcePressEnd;
+  final HitTestBehavior? behavior;
   final bool excludeFromSemantics;
   final DragStartBehavior dragStartBehavior;
 
   @override
-  _ReorientedGestureDetectorState createState() =>
-      _ReorientedGestureDetectorState();
+  _ReorientedGestureDetectorState createState() => _ReorientedGestureDetectorState();
 }
 
 typedef OriginSelector = Offset Function(Size plotSize);
@@ -178,8 +177,7 @@ class _ReorientedGestureDetectorState extends State<ReorientedGestureDetector> {
     );
   }
 
-  LongPressMoveUpdateDetails _reorientLongPressUpdate(
-      LongPressMoveUpdateDetails details) {
+  LongPressMoveUpdateDetails _reorientLongPressUpdate(LongPressMoveUpdateDetails details) {
     return LongPressMoveUpdateDetails(
       globalPosition: details.globalPosition,
       localPosition: _reorientPosition(details.localPosition),
@@ -211,9 +209,7 @@ class _ReorientedGestureDetectorState extends State<ReorientedGestureDetector> {
     final plotSize = (context.findRenderObject() as RenderBox).size;
     final origin = widget.origin(plotSize);
     final reorientedPosition = localPosition - origin;
-    return widget.pointMapper != null
-        ? widget.pointMapper(reorientedPosition)
-        : reorientedPosition;
+    return widget.pointMapper != null ? widget.pointMapper!(reorientedPosition) : reorientedPosition;
   }
 
   @override
@@ -222,179 +218,195 @@ class _ReorientedGestureDetectorState extends State<ReorientedGestureDetector> {
       // Panning
       onPanDown: widget.onPanDown != null
           ? (details) {
-              return _reorientDragDown(details);
+              widget.onPanDown!(_reorientDragDown(details));
             }
           : null,
       onPanStart: widget.onPanStart != null
           ? (details) {
-              widget.onPanStart?.call(_reorientDragStart(details));
+              widget.onPanStart!(_reorientDragStart(details));
             }
           : null,
       onPanUpdate: widget.onPanUpdate != null
           ? (details) {
-              widget.onPanUpdate?.call(_reorientDragUpdate(details));
+              widget.onPanUpdate!(_reorientDragUpdate(details));
             }
           : null,
+      // onPanEnd details don't include Offsets. Nothing to re-orient.
       onPanEnd: widget.onPanEnd,
+      // onPanCancel doesn't receive details. Nothing to re-orient.
       onPanCancel: widget.onPanCancel,
       // Horizontal Drag
       onHorizontalDragDown: widget.onHorizontalDragDown != null
           ? (details) {
-              return _reorientDragDown(details);
+              widget.onHorizontalDragDown!(_reorientDragDown(details));
             }
           : null,
       onHorizontalDragStart: widget.onHorizontalDragStart != null
           ? (details) {
-              widget.onHorizontalDragStart?.call(_reorientDragStart(details));
+              widget.onHorizontalDragStart!(_reorientDragStart(details));
             }
           : null,
       onHorizontalDragUpdate: widget.onHorizontalDragUpdate != null
           ? (details) {
-              widget.onHorizontalDragUpdate?.call(_reorientDragUpdate(details));
+              widget.onHorizontalDragUpdate!(_reorientDragUpdate(details));
             }
           : null,
+      // Drag end details don't include Offsets. Nothing to re-orient.
       onHorizontalDragEnd: widget.onHorizontalDragEnd,
+      // Drag cancel doesn't receive details. Nothing to re-orient.
       onHorizontalDragCancel: widget.onHorizontalDragCancel,
       // Vertical Drag
       onVerticalDragDown: widget.onVerticalDragDown != null
           ? (details) {
-              return _reorientDragDown(details);
+              widget.onVerticalDragDown!(_reorientDragDown(details));
             }
           : null,
       onVerticalDragStart: widget.onVerticalDragStart != null
           ? (details) {
-              widget.onVerticalDragStart?.call(_reorientDragStart(details));
+              widget.onVerticalDragStart!(_reorientDragStart(details));
             }
           : null,
       onVerticalDragUpdate: widget.onVerticalDragUpdate != null
           ? (details) {
-              widget.onVerticalDragUpdate?.call(_reorientDragUpdate(details));
+              widget.onVerticalDragUpdate!(_reorientDragUpdate(details));
             }
           : null,
+      // Drag end details don't include Offsets. Nothing to re-orient.
       onVerticalDragEnd: widget.onVerticalDragEnd,
+      // Drag cancel doesn't receive details. Nothing to re-orient.
       onVerticalDragCancel: widget.onVerticalDragCancel,
       // Taps
       onTap: widget.onTap,
       onTapDown: widget.onTapDown != null
           ? (details) {
-              return _reorientTapDown(details);
+              widget.onTapDown!(_reorientTapDown(details));
             }
           : null,
       onTapUp: widget.onTapUp != null
           ? (details) {
-              return _reorientTapUp(details);
+              widget.onTapUp!(_reorientTapUp(details));
             }
           : null,
+      // Nothing to re-orient.
       onTapCancel: widget.onTapCancel,
+      // Nothing to re-orient.
       onSecondaryTap: widget.onSecondaryTap,
       onSecondaryTapDown: widget.onSecondaryTapDown != null
           ? (details) {
-              return _reorientTapDown(details);
+              widget.onSecondaryTapDown!(_reorientTapDown(details));
             }
           : null,
       onSecondaryTapUp: widget.onSecondaryTapUp != null
           ? (details) {
-              return _reorientTapUp(details);
+              widget.onSecondaryTapUp!(_reorientTapUp(details));
             }
           : null,
+      // Nothing to re-orient.
       onSecondaryTapCancel: widget.onSecondaryTapCancel,
       onTertiaryTapDown: widget.onTertiaryTapDown != null
           ? (details) {
-              return _reorientTapDown(details);
+              widget.onTertiaryTapDown!(_reorientTapDown(details));
             }
           : null,
       onTertiaryTapUp: widget.onTertiaryTapUp != null
           ? (details) {
-              return _reorientTapUp(details);
+              widget.onTertiaryTapUp!(_reorientTapUp(details));
             }
           : null,
+      // Nothing to re-orient.
       onTertiaryTapCancel: widget.onTertiaryTapCancel,
       // Double Taps
+      // Nothing to re-orient.
       onDoubleTap: widget.onDoubleTap,
       onDoubleTapDown: widget.onDoubleTapDown != null
           ? (details) {
-              return _reorientTapDown(details);
+              widget.onDoubleTapDown!(_reorientTapDown(details));
             }
           : null,
+      // Nothing to re-orient.
       onDoubleTapCancel: widget.onDoubleTapCancel,
       // Long Press
+      // Nothing to re-orient.
       onLongPress: widget.onLongPress,
       onLongPressStart: widget.onLongPressStart != null
           ? (details) {
-              return _reorientLongPressStart(details);
+              widget.onLongPressStart!(_reorientLongPressStart(details));
             }
           : null,
       onLongPressMoveUpdate: widget.onLongPressMoveUpdate != null
           ? (details) {
-              return _reorientLongPressUpdate(details);
+              widget.onLongPressMoveUpdate!(_reorientLongPressUpdate(details));
             }
           : null,
       onLongPressEnd: widget.onLongPressEnd != null
           ? (details) {
-              return _reorientLongPressEnd(details);
+              widget.onLongPressEnd!(_reorientLongPressEnd(details));
             }
           : null,
+      // Nothing to re-orient.
       onLongPressUp: widget.onLongPressUp,
+      // Nothing re-orient.
       onSecondaryLongPress: widget.onSecondaryLongPress,
       onSecondaryLongPressStart: widget.onSecondaryLongPressStart != null
           ? (details) {
-              return _reorientLongPressStart(details);
+              widget.onSecondaryLongPressStart!(_reorientLongPressStart(details));
             }
           : null,
-      onSecondaryLongPressMoveUpdate:
-          widget.onSecondaryLongPressMoveUpdate != null
-              ? (details) {
-                  return _reorientLongPressUpdate(details);
-                }
-              : null,
+      onSecondaryLongPressMoveUpdate: widget.onSecondaryLongPressMoveUpdate != null
+          ? (details) {
+              widget.onSecondaryLongPressMoveUpdate!(_reorientLongPressUpdate(details));
+            }
+          : null,
       onSecondaryLongPressEnd: widget.onSecondaryLongPressEnd != null
           ? (details) {
-              return _reorientLongPressEnd(details);
+              widget.onSecondaryLongPressEnd!(_reorientLongPressEnd(details));
             }
           : null,
+      // Nothing to re-orient.
       onSecondaryLongPressUp: widget.onSecondaryLongPressUp,
       // Force Press
       onForcePressStart: widget.onForcePressStart != null
           ? (details) {
-              return _reorientForcePress(details);
+              widget.onForcePressStart!(_reorientForcePress(details));
             }
           : null,
       onForcePressUpdate: widget.onForcePressUpdate != null
           ? (details) {
-              return _reorientForcePress(details);
+              widget.onForcePressUpdate!(_reorientForcePress(details));
             }
           : null,
       onForcePressPeak: widget.onForcePressPeak != null
           ? (details) {
-              return _reorientForcePress(details);
+              widget.onForcePressPeak!(_reorientForcePress(details));
             }
           : null,
       onForcePressEnd: widget.onForcePressEnd != null
           ? (details) {
-              return _reorientForcePress(details);
+              widget.onForcePressEnd!(_reorientForcePress(details));
             }
           : null,
       // Scale
       onScaleStart: widget.onScaleStart != null
           ? (details) {
-              return ScaleStartDetails(
+              widget.onScaleStart!(ScaleStartDetails(
                 focalPoint: details.focalPoint,
                 localFocalPoint: _reorientPosition(details.localFocalPoint),
-              );
+              ));
             }
           : null,
       onScaleUpdate: widget.onScaleUpdate != null
           ? (details) {
-              return ScaleUpdateDetails(
+              widget.onScaleUpdate!(ScaleUpdateDetails(
                 focalPoint: details.focalPoint,
                 localFocalPoint: _reorientPosition(details.localFocalPoint),
                 scale: details.scale,
                 horizontalScale: details.horizontalScale,
                 verticalScale: details.verticalScale,
                 rotation: details.rotation,
-              );
+              ));
             }
           : null,
+      // Nothing to re-orient.
       onScaleEnd: widget.onScaleEnd,
       child: widget.child ?? SizedBox(),
     );

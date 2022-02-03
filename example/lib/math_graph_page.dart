@@ -1,6 +1,5 @@
 import 'dart:math';
 
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:superdeclarative_geometry/superdeclarative_geometry.dart';
 
@@ -15,9 +14,8 @@ class MathGraphPage extends StatefulWidget {
   _MathGraphPageState createState() => _MathGraphPageState();
 }
 
-class _MathGraphPageState extends State<MathGraphPage>
-    with SingleTickerProviderStateMixin {
-  TabController _tabController;
+class _MathGraphPageState extends State<MathGraphPage> with SingleTickerProviderStateMixin {
+  late TabController _tabController;
   CartesianOrientation _graphOrientation = CartesianOrientation.math;
   PolarCoord _polarCoord = PolarCoord(150, Angle.deg60);
 
@@ -138,27 +136,26 @@ class _MathGraphPageState extends State<MathGraphPage>
 /// the zero-axis and the `PolarCoord`, as well as the complementary angle.
 class DraggablePolarCoordGraph extends StatefulWidget {
   const DraggablePolarCoordGraph({
-    Key key,
-    @required this.graphOrientation,
+    Key? key,
+    required this.graphOrientation,
     this.polarCoord = const PolarCoord(100, Angle.zero),
     this.onPolarCoordChange,
   }) : super(key: key);
 
   final CartesianOrientation graphOrientation;
   final PolarCoord polarCoord;
-  final void Function(PolarCoord) onPolarCoordChange;
+  final void Function(PolarCoord)? onPolarCoordChange;
 
   @override
-  _DraggablePolarCoordGraphState createState() =>
-      _DraggablePolarCoordGraphState();
+  _DraggablePolarCoordGraphState createState() => _DraggablePolarCoordGraphState();
 }
 
 class _DraggablePolarCoordGraphState extends State<DraggablePolarCoordGraph> {
   final double _touchDotRadius = 25;
 
-  Offset _startDragTouchVector;
-  PolarCoord _startDragPolarCoord;
-  Offset _currentDragTouchVector;
+  Offset? _startDragTouchVector;
+  PolarCoord? _startDragPolarCoord;
+  Offset? _currentDragTouchVector;
 
   void _onDragStart(DragStartDetails details) {
     _startDragTouchVector = details.localPosition;
@@ -167,12 +164,12 @@ class _DraggablePolarCoordGraphState extends State<DraggablePolarCoordGraph> {
 
   void _onDragUpdate(DragUpdateDetails details) {
     _currentDragTouchVector = details.localPosition;
-    final dragDeltaOffset = _currentDragTouchVector - _startDragTouchVector;
+    final dragDeltaOffset = _currentDragTouchVector! - _startDragTouchVector!;
     final dragDeltaPoint = Point(dragDeltaOffset.dx, dragDeltaOffset.dy);
 
     setState(() {
       widget.onPolarCoordChange?.call(
-        _startDragPolarCoord.moveInCartesianSpace(
+        _startDragPolarCoord!.moveInCartesianSpace(
           dragDeltaPoint,
           orientation: widget.graphOrientation,
         ),
@@ -265,9 +262,7 @@ class _DraggablePolarCoordGraphState extends State<DraggablePolarCoordGraph> {
         ),
         SizedBox(width: 8),
         Transform(
-          transform: widget.graphOrientation == CartesianOrientation.math
-              ? Matrix4.rotationY(pi)
-              : Matrix4.identity(),
+          transform: widget.graphOrientation == CartesianOrientation.math ? Matrix4.rotationY(pi) : Matrix4.identity(),
           alignment: Alignment.center,
           child: Icon(
             Icons.refresh,
@@ -282,7 +277,7 @@ class _DraggablePolarCoordGraphState extends State<DraggablePolarCoordGraph> {
 class _GraphPainter extends CustomPainter {
   _GraphPainter({
     CartesianOrientation graphOrientation = CartesianOrientation.math,
-    PolarCoord polarCoord,
+    required PolarCoord polarCoord,
     Color backgroundColor = Colors.white,
     Color primaryLineColor = const Color(0xFFAAAAAA),
     Color secondaryLineColor = const Color(0xFFDDDDDD),
@@ -378,8 +373,7 @@ class _GraphPainter extends CustomPainter {
     }
 
     // Draw the zero axis for the given orientation.
-    if (_graphOrientation == CartesianOrientation.math ||
-        _graphOrientation == CartesianOrientation.screen) {
+    if (_graphOrientation == CartesianOrientation.math || _graphOrientation == CartesianOrientation.screen) {
       canvas.drawLine(
         Offset(center.dx, center.dy),
         Offset(size.width, center.dy),
@@ -420,8 +414,7 @@ class _GraphPainter extends CustomPainter {
     // respective CartesianOrientation to angle values that make
     // sense for the screen.
     final Angle primaryAngleStart = _graphOrientation.toScreenAngle(Angle.zero);
-    final Angle primaryAngleSweep =
-        _graphOrientation.toScreenAngle(primaryAngle) - primaryAngleStart;
+    final Angle primaryAngleSweep = _graphOrientation.toScreenAngle(primaryAngle) - primaryAngleStart;
     final Angle complementaryAngleStart = primaryAngleSweep + primaryAngleStart;
     final Angle complementaryAngleSweep = primaryAngleSweep.complement;
 
@@ -432,8 +425,8 @@ class _GraphPainter extends CustomPainter {
         width: 2 * primaryAngleSegmentRadius,
         height: 2 * primaryAngleSegmentRadius,
       ),
-      primaryAngleStart.radians,
-      primaryAngleSweep.radians,
+      primaryAngleStart.radians.toDouble(),
+      primaryAngleSweep.radians.toDouble(),
       true,
       _primaryAnglePaint,
     );
@@ -446,8 +439,8 @@ class _GraphPainter extends CustomPainter {
         width: 2 * complementaryAngleSegmentRadius,
         height: 2 * complementaryAngleSegmentRadius,
       ),
-      complementaryAngleStart.radians,
-      complementaryAngleSweep.radians,
+      complementaryAngleStart.radians.toDouble(),
+      complementaryAngleSweep.radians.toDouble(),
       false,
       _complementaryAnglePaint,
     );
@@ -472,7 +465,6 @@ class _GraphPainter extends CustomPainter {
         _secondaryLinePaint.color != oldDelegate._secondaryLinePaint.color ||
         _vectorPaint.color != oldDelegate._vectorPaint.color ||
         _primaryAnglePaint.color != oldDelegate._primaryAnglePaint.color ||
-        _complementaryAnglePaint.color !=
-            oldDelegate._complementaryAnglePaint.color;
+        _complementaryAnglePaint.color != oldDelegate._complementaryAnglePaint.color;
   }
 }
